@@ -147,7 +147,7 @@ for (i in 1:length(users_to_seed)) {
     # ----------------------------------------------------
     # RUN THE MODELS ON THE FRESHLY INSERTED DATABASE DATA
     # ----------------------------------------------------
-    
+
     # Extract feature vector directly from DB queries (just like a real user in the app)
     features <- build_feature_vector(db_user_id, month_str)
 
@@ -167,12 +167,12 @@ for (i in 1:length(users_to_seed)) {
     # unname() strips out any labels attached to the variables by the models.
     p_cluster_label <- as.character(unname(cluster_label))[1]
     p_predicted <- as.numeric(unname(predicted))[1]
-    
+
     # jsonlite::toJSON() converts an R list into a JSON string format.
     # SQLite doesn't support complex objects, so we store lists/arrays as raw JSON strings.
     p_flags_json <- paste(as.character(toJSON(flags, auto_unbox = TRUE)), collapse = "")
     p_recs_json <- paste(as.character(toJSON(recommendations, auto_unbox = TRUE)), collapse = "")
-    
+
     p_score <- as.numeric(unname(score))[1]
 
     # Save all the AI results back into the DB for the frontend dashboard to read.

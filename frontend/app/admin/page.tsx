@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
   const [overview, setOverview] = useState<AdminOverview | null>(null);
-  const [segments, setSegments] = useState<{segment: string, count: number}[]>([]);
+  const [segments, setSegments] = useState<{ segment: string, count: number }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const router = useRouter();
@@ -74,7 +74,7 @@ export default function AdminPage() {
                   <div className="text-3xl font-bold text-slate-900">{overview?.total_users || 0}</div>
                 </CardContent>
               </Card>
-              
+
               <Card className="shadow-sm border-slate-200">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                   <CardTitle className="text-sm font-medium text-slate-500">Total Expenses Logged</CardTitle>
@@ -106,29 +106,29 @@ export default function AdminPage() {
                   <CardTitle>System Segmentation Distribution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                   {segments.length > 0 ? (
-                     <div className="space-y-4">
-                       {segments.map((seg, i) => {
-                         const total = segments.reduce((acc, curr) => acc + curr.count, 0);
-                         const percent = Math.round((seg.count / total) * 100);
-                         return (
-                           <div key={i} className="flex items-center justify-between">
-                             <div className="space-y-1 w-full">
-                               <div className="flex items-center justify-between">
-                                  <span className="font-medium text-sm text-slate-900">{seg.segment}</span>
-                                  <span className="text-sm text-slate-500">{seg.count} cases ({percent}%)</span>
-                               </div>
-                               <div className="w-full bg-slate-100 rounded-full h-2">
-                                 <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${percent}%` }}></div>
-                               </div>
-                             </div>
-                           </div>
-                         );
-                       })}
-                     </div>
-                   ) : (
-                     <div className="text-slate-500 text-center py-4">No segment data available yet.</div>
-                   )}
+                  {segments.length > 0 ? (
+                    <div className="space-y-4">
+                      {segments.map((seg, i) => {
+                        const total = segments.reduce((acc, curr) => acc + curr.count, 0);
+                        const percent = Math.round((seg.count / total) * 100);
+                        return (
+                          <div key={i} className="flex items-center justify-between">
+                            <div className="space-y-1 w-full">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium text-sm text-slate-900">{seg.segment}</span>
+                                <span className="text-sm text-slate-500">{seg.count} cases ({percent}%)</span>
+                              </div>
+                              <div className="w-full bg-slate-100 rounded-full h-2">
+                                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${percent}%` }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-slate-500 text-center py-4">No segment data available yet.</div>
+                  )}
                 </CardContent>
               </Card>
             </div>
