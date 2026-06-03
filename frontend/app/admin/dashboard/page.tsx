@@ -234,7 +234,7 @@ export default function AdminDashboardPage() {
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-slate-800">Live Segment Distribution</h3>
-                <span className="text-xs text-slate-400">{totalSegmented} users analysed</span>
+                <span className="text-xs text-slate-400">{totalSegmented} cases analysed</span>
               </div>
               {segments.length > 0 && mounted ? (
                 <ResponsiveContainer width="100%" height={220}>
@@ -270,7 +270,7 @@ export default function AdminDashboardPage() {
                     {seg.conditions}
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400">Current users</span>
+                    <span className="text-xs text-slate-400">Current cases</span>
                     <span className="font-bold text-base" style={{ color: seg.color }}>
                       {live?.count ?? 0} <span className="text-xs font-normal text-slate-400">({pct}%)</span>
                     </span>

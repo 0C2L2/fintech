@@ -116,7 +116,7 @@ export default function AdminPage() {
                              <div className="space-y-1 w-full">
                                <div className="flex items-center justify-between">
                                   <span className="font-medium text-sm text-slate-900">{seg.segment}</span>
-                                  <span className="text-sm text-slate-500">{seg.count} users ({percent}%)</span>
+                                  <span className="text-sm text-slate-500">{seg.count} cases ({percent}%)</span>
                                </div>
                                <div className="w-full bg-slate-100 rounded-full h-2">
                                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${percent}%` }}></div>
