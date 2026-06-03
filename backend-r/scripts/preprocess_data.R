@@ -42,38 +42,6 @@ cat("Loaded", nrow(df), "rows and", ncol(df), "columns\n")
 
 
 # -----------------------------------------------
-# Step 4: Group Data by User and Month
-# We are converting raw transaction logs into aggregated monthly totals per user.
-# -----------------------------------------------
-cat("\nAggregating transactions to monthly totals...\n")
-
-# The %>% operator is called a "pipe". It passes the dataframe on the left directly
-# into the first argument of the function on the right, making code easy to read top-to-bottom.
-monthly_df <- df %>%
-  # group_by() tells R to perform all subsequent operations per-user AND per-month.
-  # So sum() will calculate the sum for Jan, Feb, Mar independently for each user.
-  group_by(user_id, month) %>%
-  # summarise() collapses all rows in a group into a single row.
-  # We sum up every expense column, plus the user's base Income and Desired_Savings goal.
-  summarise(
-    Income = sum(Income, na.rm = TRUE),
-    Desired_Savings = sum(Desired_Savings, na.rm = TRUE),
-    Rent = sum(Rent, na.rm = TRUE),
-    Loan_Repayment = sum(Loan_Repayment, na.rm = TRUE),
-    Insurance = sum(Insurance, na.rm = TRUE),
-    Groceries = sum(Groceries, na.rm = TRUE),
-    Transport = sum(Transport, na.rm = TRUE),
-    Eating_Out = sum(Eating_Out, na.rm = TRUE),
-    Entertainment = sum(Entertainment, na.rm = TRUE),
-    Utilities = sum(Utilities, na.rm = TRUE),
-    Healthcare = sum(Healthcare, na.rm = TRUE),
-    Education = sum(Education, na.rm = TRUE),
-    Miscellaneous = sum(Miscellaneous, na.rm = TRUE),
-    # .groups = "drop" ungroups the dataframe so future operations apply to the whole table again.
-    .groups = "drop"
-  )
-
-# -----------------------------------------------
 # Step 2: Look at the raw data
 # -----------------------------------------------
 cat("\n--- First look at the data ---\n")
@@ -230,51 +198,6 @@ print(round(head(ts_df[, share_cols], 5), 3))
 cat("\n--- Summary of all category shares ---\n")
 print(summary(ts_df[, share_cols]))
 
-# Check: do all shares add up to 1.0 for each row?
-row_totals <- rowSums(ts_df[, share_cols])
-# mutate() adds new columns to the dataframe based on existing columns.
-# rowSums() calculates the sum horizontally across the specified columns.
-monthly_df <- monthly_df %>%
-  mutate(
-    # Total expenses is the sum of all 11 category columns.
-    total_expense = rowSums(across(c(
-      Rent, Loan_Repayment, Insurance, Groceries,
-      Transport, Eating_Out, Entertainment, Utilities,
-      Healthcare, Education, Miscellaneous
-    ))),
-    # The actual savings achieved that month is Income minus what they spent.
-    actual_savings = Income - total_expense,
-    # Savings rate is the percentage of income saved (e.g. 0.15 = 15%).
-    # We use pmax(Income, 1) to prevent a "divide by zero" error if Income is 0.
-    savings_rate = actual_savings / pmax(Income, 1)
-  )
-
-# -----------------------------------------------
-# Step 6: Create Month-over-Month lags
-# Time-series models need historical context. We need to know "what happened last month".
-# -----------------------------------------------
-cat("Creating lag features (previous month data)...\n")
-
-monthly_df <- monthly_df %>%
-  # Arrange by time so the lag grabs the chronologically correct previous row.
-  arrange(user_id, month) %>%
-  group_by(user_id) %>%
-  mutate(
-    # lag(column, n=1) gets the value from the row immediately above it (last month).
-    # default = 0 means if there is no previous month (e.g., month 1), it assumes 0.
-    prev_expense = lag(total_expense, n = 1, default = 0),
-    prev_savings = lag(actual_savings, n = 1, default = 0),
-
-    # Calculate month-over-month expense growth as a percentage.
-    # coalesce() catches NA/NaN values (like 0/0) and replaces them with 0.
-    expense_growth_pct = coalesce((total_expense - prev_expense) / pmax(prev_expense, 1), 0)
-  ) %>%
-  ungroup()
-
-cat("\n--- Do shares sum to 1.0? ---\n")
-cat("Min sum:", round(min(row_totals), 4), "\n")
-cat("Max sum:", round(max(row_totals), 4), "\n")
-cat("Mean sum:", round(mean(row_totals), 4), "(should be 1.0)\n")
 
 # Sort by user and month so lags work correctly
 ts_df <- ts_df[order(ts_df$user_id, ts_df$month), ]
