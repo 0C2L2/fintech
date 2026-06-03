@@ -1,19 +1,29 @@
 # ============================================
 # Authentication Module
 # ============================================
+# This file contains ONLY helper functions used by plumber.R route handlers.
+# Route definitions (Plumber decorators + anonymous functions) live in plumber.R.
+# ============================================
 
 library(bcrypt)
 library(jose)
 library(jsonlite)
 
-# JWT secret key - in production, use environment variable
+# JWT secret key - in production, set the JWT_SECRET environment variable
 JWT_SECRET <- Sys.getenv("JWT_SECRET", "finhealth-mvp-secret-key-change-in-production-2024")
 JWT_EXPIRY <- 86400 * 7  # 7 days in seconds
 
-# Default categories to seed for new users
-DEFAULT_CATEGORIES <- c("Rent", "Transport", "Food", "Education", "Entertainment", "Savings", "Other")
+# Default categories to seed for new users (aligned with Kaggle feature columns)
+DEFAULT_CATEGORIES <- c(
+  "Rent", "Loan Repayment", "Insurance", "Groceries",
+  "Transport", "Eating Out", "Entertainment", "Utilities",
+  "Healthcare", "Education", "Miscellaneous"
+)
 
-#' Generate JWT token
+#' Generate a signed JWT token for a user
+#' @param user_id User's UUID string
+#' @param role User's role ("user" or "admin")
+#' @return Character: signed JWT string
 generate_token <- function(user_id, role) {
   now <- as.numeric(Sys.time())
   claim <- jwt_claim(
@@ -25,11 +35,13 @@ generate_token <- function(user_id, role) {
   jwt_encode_hmac(claim, secret = charToRaw(JWT_SECRET))
 }
 
-#' Decode and validate JWT token
+#' Decode and validate a JWT token
+#' @param token Character: JWT string (without "Bearer " prefix)
+#' @return Named list of claims on success, NULL on failure or expiry
 decode_token <- function(token) {
   tryCatch({
     claims <- jwt_decode_hmac(token, secret = charToRaw(JWT_SECRET))
-    # Check expiration
+    # Explicit expiration check (jose may not enforce this)
     if (as.numeric(Sys.time()) > claims$exp) {
       return(NULL)
     }
@@ -39,7 +51,8 @@ decode_token <- function(token) {
   })
 }
 
-#' Seed default categories for a new user
+#' Seed default expense categories for a newly registered user
+#' @param user_id User's UUID string
 seed_user_categories <- function(user_id) {
   for (cat_name in DEFAULT_CATEGORIES) {
     cat_id <- new_uuid()

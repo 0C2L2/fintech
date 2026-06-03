@@ -4,55 +4,6 @@
 
 ---
 
-## Screenshots
-
-### User Views
-
-**Login**
-![Login](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/01_login.png)
-
-**Dashboard** — spending overview, category pie chart, trend line
-![User Dashboard](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/02_user_dashboard.png)
-
-**Income** — monthly income management
-![Income](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/03_income.png)
-
-**Expenses** — add and manage expense records with category selector
-![Expenses](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/04_expenses.png)
-
-**Categories** — manage spending categories with per-category budget thresholds
-![Categories](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/05_categories.png)
-
-**Analysis** — ML-powered financial score, overspending flags, segment, and personalized recommendations
-![Analysis](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/06_analysis.png)
-
-**Reports** — download full Excel report (.xlsx)
-![Reports](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/07_reports.png)
-
----
-
-### Admin Panel
-
-**Admin Dashboard — Top** — platform-wide metrics and user segmentation
-![Admin Dashboard Top](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/08_admin_dashboard_top.png)
-
-**Admin Dashboard — Overspending & Score** — live issue frequency and scoring formula
-![Admin Dashboard Mid](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/09_admin_dashboard_mid.png)
-
-**Admin Dashboard — Prediction & Recommendations** — savings prediction methodology and recommendation engine
-![Admin Dashboard Bottom](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/10_admin_dashboard_bot.png)
-
-**R Algorithm Plots — Top** — live ggplot2 charts: feature vector, segmentation, and overspending rules
-![Admin R Plots Top](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/11_admin_plots_top.png)
-
-**R Algorithm Plots — Mid** — live overspending frequency and financial score formula charts
-![Admin R Plots Mid](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/12_admin_plots_mid.png)
-
-**Database Explorer** — raw SQLite table browser for admin
-![Admin Database](https://raw.githubusercontent.com/0C2L2/fintech/main/screenshots/13_admin_database.png)
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
